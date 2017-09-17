@@ -29,10 +29,12 @@ class Main: io.vertx.core.AbstractVerticle {
         var option = DeploymentOptions()
         option.isWorker = true
         vertx.deployVerticle("com.lijiye.demo.Worker", option)
-
-        vertx.eventBus().send<Any>("sample.data", "Hello, world!", { r ->
-            println("[Main] Receiving reply ' ${r.result().body()}' in ${java.lang.Thread.currentThread().getName()}")
+        vertx.setPeriodic(1000, {handler ->
+            vertx.eventBus().send<Any>("sample.data", "Hello, world!", { r ->
+                println("[Main] Receiving reply ' ${r.result().body()}' in ${java.lang.Thread.currentThread().getName()}")
+            })
         })
+
     }
 }
 
